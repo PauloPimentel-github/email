@@ -11,4 +11,4 @@ spring:
     password: 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
 
 email:
-  sender: <naoresponder@teste.com.br>
+  from: 'paulo.h.g.pimentel@gmail.com'

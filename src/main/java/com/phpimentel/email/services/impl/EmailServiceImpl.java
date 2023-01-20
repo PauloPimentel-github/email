@@ -21,15 +21,14 @@ public class EmailServiceImpl implements EmailService {
     private EmailProperties emailProperties;
 
     @Override
-    public void enviar(EmailDto emailDto) {
+    public void send(EmailDto emailDto) {
         try {
             MimeMessage mimeMessage = this.mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
-            helper.setFrom(this.emailProperties.getSender());
+            helper.setFrom(this.emailProperties.getFrom());
             helper.setTo(emailDto.getRecipients().toArray(new String[0]));
             helper.setSubject(emailDto.getSubject());
             helper.setText(emailDto.getBody(), true);
-
 
             this.mailSender.send(mimeMessage);
         } catch (Exception exception) {

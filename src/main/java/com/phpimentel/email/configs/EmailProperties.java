@@ -16,5 +16,5 @@ import javax.validation.constraints.NotNull;
 public class EmailProperties {
 
     @NotNull
-    private String sender;
+    private String from;
 }
