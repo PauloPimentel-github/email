@@ -1,0 +1,11 @@
+spring:
+  config:
+    import: 'optional:configserver:'
+  output:
+    ansi:
+      enabled: ALWAYS
+  mail:
+    host: smtp.sendgrid.net
+    port: 587
+    username: apikey
+    password: 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
