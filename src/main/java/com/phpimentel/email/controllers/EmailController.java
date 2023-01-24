@@ -19,8 +19,10 @@ public class EmailController {
     public void sendEmail(@RequestBody EmailDto emailDto) {
         var message = EmailDto.builder()
                 .subject(emailDto.getSubject())
-                .body(emailDto.getBody())
-                .recipient("paulo.h.g.pimentel@gmail.com")
+                .body("template.html")
+                .model("username", emailDto.getTo())
+                .to(emailDto.getTo())
+                .recipients(emailDto.getRecipients())
                 .build();
 
         this.emailService.send(message);

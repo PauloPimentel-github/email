@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.Singular;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -22,4 +23,10 @@ public class EmailDto implements Serializable {
 
     @NonNull
     private String body;
+
+    @NonNull
+    private String to;
+
+    @Singular("model")
+    private Map<String, Object> model;
 }
