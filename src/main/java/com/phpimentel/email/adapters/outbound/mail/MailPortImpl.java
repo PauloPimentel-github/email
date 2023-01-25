@@ -1,9 +1,9 @@
-package com.phpimentel.email.services.impl;
+package com.phpimentel.email.adapters.outbound.mail;
 
-import com.phpimentel.email.configs.EmailProperties;
-import com.phpimentel.email.dtos.EmailDto;
-import com.phpimentel.email.exceptions.EmailException;
-import com.phpimentel.email.services.EmailService;
+import com.phpimentel.email.adapters.configs.EmailProperties;
+import com.phpimentel.email.core.domain.EmailDomain;
+import com.phpimentel.email.core.exceptions.EmailException;
+import com.phpimentel.email.core.ports.MailPort;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 
 @Slf4j
 @Service
-public class EmailServiceImpl implements EmailService {
+public class MailPortImpl implements MailPort {
 
     @Autowired
     private JavaMailSender mailSender;
@@ -29,28 +29,29 @@ public class EmailServiceImpl implements EmailService {
     private Configuration freemarkerConfig;
 
     @Override
-    public void send(EmailDto emailDto) {
+    public void send(EmailDomain emailDomain) {
         try {
-            String body = this.proccessTemplate(emailDto);
+            String body = this.proccessTemplate(emailDomain);
             MimeMessage mimeMessage = this.mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
             String from = this.emailProperties.getFrom();
             helper.setFrom(from);
-            helper.setTo(emailDto.getRecipients().toArray(new String[0]));
-            helper.setSubject(emailDto.getSubject());
+            helper.setTo(emailDomain.getRecipients().toArray(new String[0]));
+            helper.setSubject(emailDomain.getSubject());
             helper.setText(body, true);
 
             this.mailSender.send(mimeMessage);
-            log.info("E-mail enviado com sucesso...");
+            log.info("E-mail enviado com sucesso!");
         } catch (Exception exception) {
+            log.error("Error ao enviar e-mail", exception);
             throw new EmailException("Não foi possível enviar o e-mail", exception);
         }
     }
 
-    private String proccessTemplate(EmailDto emailDto) {
+    private String proccessTemplate(EmailDomain emailDomain) {
         try {
-            Template template = this.freemarkerConfig.getTemplate(emailDto.getBody());
-            return FreeMarkerTemplateUtils.processTemplateIntoString(template, emailDto.getModel());
+            Template template = this.freemarkerConfig.getTemplate(emailDomain.getBody());
+            return FreeMarkerTemplateUtils.processTemplateIntoString(template, emailDomain.getModel());
         } catch (Exception exception) {
             throw new EmailException("Não foi possível montar o template do e-mail", exception);
         }

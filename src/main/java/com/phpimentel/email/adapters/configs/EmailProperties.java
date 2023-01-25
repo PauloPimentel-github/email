@@ -1,4 +1,4 @@
-package com.phpimentel.email.configs;
+package com.phpimentel.email.adapters.configs;
 
 import lombok.Getter;
 import lombok.Setter;

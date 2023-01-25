@@ -1,4 +1,4 @@
-package com.phpimentel.email.dtos;
+package com.phpimentel.email.adapters.dtos;
 
 import lombok.Builder;
 import lombok.Getter;

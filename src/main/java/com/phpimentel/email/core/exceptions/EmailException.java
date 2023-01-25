@@ -1,4 +1,4 @@
-package com.phpimentel.email.exceptions;
+package com.phpimentel.email.core.exceptions;
 
 public class EmailException extends RuntimeException {
 

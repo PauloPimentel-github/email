@@ -1,7 +1,9 @@
-package com.phpimentel.email.controllers;
+package com.phpimentel.email.adapters.inbound.controllers;
 
-import com.phpimentel.email.dtos.EmailDto;
-import com.phpimentel.email.services.EmailService;
+import com.phpimentel.email.adapters.dtos.EmailDto;
+import com.phpimentel.email.core.domain.EmailDomain;
+import com.phpimentel.email.core.ports.EmailServicePort;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
 
     @Autowired
-    private EmailService emailService;
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private EmailServicePort emailServicePort;
 
     @PostMapping
     public void sendEmail(@RequestBody EmailDto emailDto) {
-        var message = EmailDto.builder()
+        var email = EmailDto.builder()
                 .subject(emailDto.getSubject())
                 .body("template.html")
                 .model("username", emailDto.getTo())
@@ -25,6 +30,7 @@ public class EmailController {
                 .recipients(emailDto.getRecipients())
                 .build();
 
-        this.emailService.send(message);
+        var emailDomain = this.modelMapper.map(email, EmailDomain.class);
+        this.emailServicePort.send(emailDomain);
     }
 }
